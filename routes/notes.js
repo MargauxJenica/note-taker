@@ -7,38 +7,42 @@ notes.get('/', (req, res) =>
   readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)))
 );
 
-// POST Route for submitting feedback
+// POST Route for submitting note
 notes.post('/', (req, res) => {
-  // Destructuring assignment for the items in req.body
-  const { title, text } = req.body;
-
-  if (req.body) {
-    // Variable for the object we will save
-    const newNote = {
-      title,
-      text,
-      id: uuidv4(),
-    };
-
-    readAndAppend(newNote, './db/db.json');
-
-    const response = {
-      status: 'success',
-      body: newNote,
-    };
-
-    res.json(response);
-  } else {
-    res.json('Error in creating note');
-  }
-});
-
+    // Destructuring assignment for the items in req.body
+    const { title, text } = req.body;
+  
+    if (title && text) {
+      // Check if title and text are present in req.body
+  
+      // Variable for the object we will save
+      const newNote = {
+        title,
+        text,
+        id: uuidv4(),
+      };
+  
+      readAndAppend(newNote, './db/db.json')
+        .then((data) => {
+            console.log('Data from readFromFile:', data);
+            const response = {
+                status: 'success',
+                body: newNote,
+            };
+            res.json(response);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).json({ error: 'Internal Server Error' });
+        });
+    } else {
+      res.status(400).json({ error: 'Title and text are required in the request body' });
+    }
+  });
+  
 // DELETE Route for a specific note 
 notes.delete('/:id', (req, res) => {
     const noteId = req.params.id;
-
-    // Log the received ID for debugging
-    console.log('Received DELETE request for ID:', noteId);
 
     readFromFile('./db/db.json')
         .then((data) => JSON.parse(data))
