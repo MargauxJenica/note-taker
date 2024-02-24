@@ -27,4 +27,4 @@
 ### Opened Saved Note
 ![ Opened Saved Note ](/images/openSavedNote.png)
 
-## [ Social-Network-API ](https://margauxjenica.github.io/note-taker/)
+## [ Note Taker ](https://thawing-bastion-91499-d652284a8c77.herokuapp.com/)
